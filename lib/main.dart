@@ -46,18 +46,24 @@ class _MyHomePageState extends State<MyHomePage>  with SingleTickerProviderState
 
   Future<List<Match>> fetchMathes() async {
     http.Response response = await http.get(Uri.parse('http://www.mocky.io/v2/5de8d38a3100000f006b1479'));
+    if(response.statusCode == HttpStatus.ok){
     List<dynamic> data= jsonDecode(response.body)['data'];
     List<Match> matches =[];
     for (int i=0; i<data.length;i++){
       matches.add(Match.fromJson(data[i]));
     }
     return matches;
+    }
+    else return null;
   }
   @override
   void initState(){
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    
+    // this fetches all data from the remote api to local classes
     fetchMathes().then((value) {
+      if(value != null)
       setState(() {
               matches = value;
               matchesLoaded = true;
@@ -79,6 +85,13 @@ class _MyHomePageState extends State<MyHomePage>  with SingleTickerProviderState
                 child:(matchesLoaded)?ListView(
                   children: List.generate(matches.length, (i) => ListTile(
                     title: Text(matches[i].homeTeam.fullName),
+                    onTap: (){
+                      showDialog(context: context, builder: (context){
+                        return Dialog( 
+                          
+                        );
+                      });
+                    },
                   )),
                 ):CircularProgressIndicator(),
               ),
