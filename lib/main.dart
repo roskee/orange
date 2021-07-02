@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'match.dart';
+import 'team.dart';
 void main() {
   runApp(MyApp());
 }
@@ -33,10 +38,15 @@ class _MyHomePageState extends State<MyHomePage>  with SingleTickerProviderState
     Tab(text: 'Games',),
     Tab(text: 'Teams',)
   ];
+  Future<List<Match>> fetchMathes() async {
+    http.Response response = await http.get(Uri.parse('http://www.mocky.io/v2/5de8d38a3100000f006b1479'));
+    print(jsonDecode(response.body));
+  }
   @override
   void initState(){
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    fetchMathes();
   }
   @override
   Widget build(BuildContext context) {
