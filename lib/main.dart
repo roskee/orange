@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -48,6 +49,17 @@ class _MyHomePageState extends State<MyHomePage>
     )
   ];
   List<Match> matches;
+  void updateMatches(){
+    Timer.periodic(new Duration(seconds: 1), (timer) {
+    fetchMathes().then((value) {
+      if (value != null)
+        setState(() {
+          matches = value;
+          matchesLoaded = true;
+        });
+    });
+});
+  }
   Future<List<Match>> fetchMathes() async {
     http.Response response = await http
         .get(Uri.parse('http://www.mocky.io/v2/5de8d38a3100000f006b1479'));
@@ -76,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage>
           matchesLoaded = true;
         });
     });
+    updateMatches();
   }
 
   @override
