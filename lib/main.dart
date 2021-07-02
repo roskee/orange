@@ -98,7 +98,24 @@ class _MyHomePageState extends State<MyHomePage>
                             matches.length,
                             (i) => InkWell(
                               onTap: (){
-                                
+                                showDialog(context: context, builder: (context)=>AlertDialog(
+                                  content:Column(
+                                    children: [
+                                      Expanded(child:Text('Home Team: ${matches[i].homeTeam}'),),
+                                      Expanded(child:Text('Visitor Team: ${matches[i].visitorTeam}'),),
+                                      Expanded(child:Text('Home Score: ${matches[i].homeTeamScore}'),),
+                                      Expanded(child:Text('Visitor Score: ${matches[i].visitorTeamScore}'),),
+                                      Expanded(child:Text('Date: ${matches[i].date}'),),
+                                      Expanded(child:Text('Period: ${matches[i].period}'),),
+                                      Expanded(child:Text('Post Season: ${matches[i].postSeason}'),),
+                                      Expanded(child:Text('Season: ${matches[i].season}'),),
+                                      Expanded(child:Text('Status: ${matches[i].status}'),),
+                                    ],
+                                  ),
+                                  actions: [TextButton(child: Text('OK'),onPressed: (){
+                                    Navigator.of(context).pop();
+                                  },)],
+                                ));
                               },
                                     child: Card(
                                   child: Row(
@@ -136,17 +153,6 @@ class _MyHomePageState extends State<MyHomePage>
                                     ],
                                   ),
                                 ))
-                            //  ListTile(
-                            //   title: Text(matches[i].homeTeam.fullName),
-                            //   subtitle: Text("${matches[i].date.toString()}"),
-                            //   onTap: (){
-                            //     showDialog(context: context, builder: (context){
-                            //       return Dialog(
-
-                            //       );
-                            //     });
-                            //   },
-                            // )),
                             ),
                       )
                     : CircularProgressIndicator(),
