@@ -48,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage>
     )
   ];
   List<Match> matches;
-
   Future<List<Match>> fetchMathes() async {
     http.Response response = await http
         .get(Uri.parse('http://www.mocky.io/v2/5de8d38a3100000f006b1479'));
@@ -163,14 +162,16 @@ class _MyHomePageState extends State<MyHomePage>
                     ? ListView(
                         children: List.generate(
                             Team.teams.length,
-                            (i) => ListTile(
+                            (i) => Row(
+                              children:[
+                                Expanded(child:ListTile(
                                   title: Text(Team.teams[i].fullName),
-                                  subtitle: Row(
-                                    children: [
-                                      Text('city: ${Team.teams[i].city}'),
-                                      Text('name: ${Team.teams[i].name}')
-                                    ],
-                                  ),
+                                  subtitle: Text('City: ${Team.teams[i].city}'),
+                                  )),
+                                Expanded(child:ListTile(
+                                  subtitle: Text('division: ${Team.teams[i].division}'),
+                                ))
+                              ],
                                 )))
                     : CircularProgressIndicator(),
               )
