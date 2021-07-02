@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 import 'team.dart';
 class Match{
   int id;
-  String date;
+  DateTime date;
   Team homeTeam;
   int homeTeamScore;
   int period;
@@ -13,7 +15,7 @@ class Match{
   int visitorTeamScore;
   Match.fromJson(Map<String, dynamic> json){
     this.id = json['id'];
-    this.date = json['date'];
+    this.date = DateTime.parse(json['date']);
     this.homeTeam = Team.fromJson(json['home_team']);
     this.homeTeamScore = json['home_team_score'];
     this.period = json['period'];

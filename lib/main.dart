@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage>  with SingleTickerProviderState
     for (int i=0; i<data.length;i++){
       matches.add(Match.fromJson(data[i]));
     }
+    matches.sort((a,b)=> b.date.compareTo(a.date) );
     return matches;
     }
     else return null;
@@ -85,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage>  with SingleTickerProviderState
                 child:(matchesLoaded)?ListView(
                   children: List.generate(matches.length, (i) => ListTile(
                     title: Text(matches[i].homeTeam.fullName),
+                    subtitle: Text("${matches[i].date.toString()}"),
                     onTap: (){
                       showDialog(context: context, builder: (context){
                         return Dialog( 
