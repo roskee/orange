@@ -49,17 +49,18 @@ class _MyHomePageState extends State<MyHomePage>
     )
   ];
   List<Match> matches;
-  void updateMatches(){
+  void updateMatches() {
     Timer.periodic(new Duration(seconds: 1), (timer) {
-    fetchMathes().then((value) {
-      if (value != null)
-        setState(() {
-          matches = value;
-          matchesLoaded = true;
-        });
+      fetchMathes().then((value) {
+        if (value != null)
+          setState(() {
+            matches = value;
+            matchesLoaded = true;
+          });
+      });
     });
-});
   }
+
   Future<List<Match>> fetchMathes() async {
     http.Response response = await http
         .get(Uri.parse('http://www.mocky.io/v2/5de8d38a3100000f006b1479'));
@@ -109,27 +110,61 @@ class _MyHomePageState extends State<MyHomePage>
                         children: List.generate(
                             matches.length,
                             (i) => InkWell(
-                              onTap: (){
-                                showDialog(context: context, builder: (context)=>AlertDialog(
-                                  content:Column(
-                                    children: [
-                                      Expanded(child:Text('Home Team: ${matches[i].homeTeam}'),),
-                                      Expanded(child:Text('Visitor Team: ${matches[i].visitorTeam}'),),
-                                      Expanded(child:Text('Home Score: ${matches[i].homeTeamScore}'),),
-                                      Expanded(child:Text('Visitor Score: ${matches[i].visitorTeamScore}'),),
-                                      Expanded(child:Text('Date: ${matches[i].date}'),),
-                                      Expanded(child:Text('Period: ${matches[i].period}'),),
-                                      Expanded(child:Text('Post Season: ${matches[i].postSeason}'),),
-                                      Expanded(child:Text('Season: ${matches[i].season}'),),
-                                      Expanded(child:Text('Status: ${matches[i].status}'),),
-                                    ],
-                                  ),
-                                  actions: [TextButton(child: Text('OK'),onPressed: (){
-                                    Navigator.of(context).pop();
-                                  },)],
-                                ));
-                              },
-                                    child: Card(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            content: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                      'Home Team: ${matches[i].homeTeam.fullName}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Visitor Team: ${matches[i].visitorTeam.fullName}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Home Score: ${matches[i].homeTeamScore}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Visitor Score: ${matches[i].visitorTeamScore}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Date: ${matches[i].date}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Period: ${matches[i].period}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Post Season: ${matches[i].postSeason}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Season: ${matches[i].season}'),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                      'Status: ${matches[i].status}'),
+                                                ),
+                                              ],
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                child: Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              )
+                                            ],
+                                          ));
+                                },
+                                child: Card(
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -164,8 +199,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       )
                                     ],
                                   ),
-                                ))
-                            ),
+                                ))),
                       )
                     : CircularProgressIndicator(),
               ),
@@ -175,17 +209,41 @@ class _MyHomePageState extends State<MyHomePage>
                     ? ListView(
                         children: List.generate(
                             Team.teams.length,
-                            (i) => Row(
-                              children:[
-                                Expanded(child:ListTile(
-                                  title: Text(Team.teams[i].fullName),
-                                  subtitle: Text('City: ${Team.teams[i].city}'),
-                                  )),
-                                Expanded(child:ListTile(
-                                  subtitle: Text('division: ${Team.teams[i].division}'),
-                                ))
-                              ],
-                                )))
+                            (i) => Card(
+                                  child: ListTile(
+                                      title: Text(Team.teams[i].fullName),
+                                      subtitle: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    'City: ${Team.teams[i].city}'),
+                                                Text(
+                                                    'name: ${Team.teams[i].name}')
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                              child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  'division: ${Team.teams[i].division}'),
+                                              Text(
+                                                  'conference: ${Team.teams[i].conference}'),
+                                            ],
+                                          ))
+                                        ],
+                                      )
+                                      //Text('City: ${Team.teams[i].city}          name: ${Team.teams[i].name}\ndivision: ${Team.teams[i].division}            conference: ${Team.teams[i].conference}'),
+                                      ),
+                                )
+                            //     )
+                            ))
                     : CircularProgressIndicator(),
               )
             ],
