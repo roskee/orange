@@ -14,5 +14,12 @@ class Team {
     this.division = json['division'];
     this.fullName = json['full_name'];
     this.name = json['name'];
+    addTeam(this);
+  }
+  static List<Team> teams =[];
+  static void addTeam(Team team){
+    if(teams.indexWhere((element) => element.id == team.id) == -1){
+      teams.add(team);
+    }
   }
 }

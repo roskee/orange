@@ -33,20 +33,36 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>  with SingleTickerProviderStateMixin{
 
+  // bool control values
+  bool matchesLoaded = false;
+
+  // data values
   TabController tabController;
   List<Tab> tabs = [
     Tab(text: 'Games',),
     Tab(text: 'Teams',)
   ];
+  List<Match> matches;
+
   Future<List<Match>> fetchMathes() async {
     http.Response response = await http.get(Uri.parse('http://www.mocky.io/v2/5de8d38a3100000f006b1479'));
-    print(jsonDecode(response.body));
+    List<dynamic> data= jsonDecode(response.body)['data'];
+    List<Match> matches =[];
+    for (int i=0; i<data.length;i++){
+      matches.add(Match.fromJson(data[i]));
+    }
+    return matches;
   }
   @override
   void initState(){
     super.initState();
     tabController = TabController(length: 2, vsync: this);
-    fetchMathes();
+    fetchMathes().then((value) {
+      setState(() {
+              matches = value;
+              matchesLoaded = true;
+            });
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -59,8 +75,25 @@ class _MyHomePageState extends State<MyHomePage>  with SingleTickerProviderState
           child: TabBarView(
             controller: tabController,
             children: [
-              Text("hello world"),
-              Text('hello now')
+              Center(
+                child:(matchesLoaded)?ListView(
+                  children: List.generate(matches.length, (i) => ListTile(
+                    title: Text(matches[i].homeTeam.fullName),
+                  )),
+                ):CircularProgressIndicator(),
+              ),
+              Center(
+                child: (matchesLoaded)?ListView(
+                  children: List.generate(Team.teams.length, (i) => ListTile(
+                    title: Text(Team.teams[i].fullName),
+                    subtitle: Row(
+                      children: [
+                      Text('city: ${Team.teams[i].city}'),
+                      Text('name: ${Team.teams[i].name}')
+                    ],),
+                  ))
+                ):CircularProgressIndicator(),
+              )
             ],
           ),
        ) // This trailing comma makes auto-formatting nicer for build methods.
